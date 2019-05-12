@@ -11,7 +11,7 @@ fprintf('%-12s%-12s%-12s%-12s\n','time','position','velocity','energy');
 i=1;
 e0=0.5*k*position*position;
 clear v[tpve];
-while t <= 10
+while t <= 1.1*2*pi*sqrt(mass/k)
   vt(i)=t;
   vp(i)=position;
   vv(i)=velocity;

@@ -1,4 +1,5 @@
 %
+% vertical spring position at start of step
 % gravity and potential energy are taken into account
 t = 0.0;
 dt = 0.1;

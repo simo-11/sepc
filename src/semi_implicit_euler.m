@@ -1,5 +1,5 @@
 %
-% Simo tests simple integrations
+% horizontal spring position at start of step
 t = 0.0;
 dt = 0.1;
 velocity = 0.0;

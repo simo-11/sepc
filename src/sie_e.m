@@ -16,7 +16,8 @@ fprintf('%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s\n',
 i=1;
 e0=0.5*k*position*position-mass*g*position;
 clear v[tpve];
-while t <= 1.1*2*pi*sqrt(mass/k)
+w0=sqrt(k/mass);
+while t <= 1.1*2*pi/w0
   % store and print results 
   vt(i)=t;
   vp(i)=position;
@@ -32,7 +33,7 @@ while t <= 1.1*2*pi*sqrt(mass/k)
   % Is impulse from spring - better than -k*position*dt
   % - position at middle of timestep creates damping and is not stable
   %
-  Is=ifs(k,mass,position,velocity,dt,0); 
+  Is=ifs(k,mass,position,velocity,dt,w0,0); 
   Ig=mass*g*dt;
   I=Ig+Is;
   velocity += I/mass;

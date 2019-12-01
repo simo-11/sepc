@@ -17,7 +17,10 @@ i=1;
 e0=0.5*k*position*position-mass*g*position;
 clear v[tpve];
 w0=sqrt(k/mass);
-while t <= 1.1*2*pi/w0
+if(w0*dt>2)
+  fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
+endif
+while t <= 2.1*2*pi/w0
   % store and print results 
   vt(i)=t;
   vp(i)=position;
@@ -50,4 +53,4 @@ while t <= 1.1*2*pi/w0
  title(['velocity [m/s] - k=' num2str(k)]);
  subplot(1,3,3);
  plot(vt,ve,'b');
- title('energy [J]');
+ title(['energy [J] - \omega\Delta_t=' num2str(w0*dt)]);

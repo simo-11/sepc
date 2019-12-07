@@ -3,7 +3,7 @@
 % gravity and potential energy are taken into account if g is set
 % 
 t = 0.0;
-dt = 0.1;
+dt = 0.2;
 k=1;
 g=0;
 mass = 1.0;
@@ -16,12 +16,12 @@ fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
 i=1;
 [e0,ee,ek,ep] = energy(p0,v0,mass,k,g);
 pa=sqrt(2*(ee+ek)/k);
-vmax=sqrt(2*(ee+ek)/mass);
+va=sqrt(2*(ee+ek)/mass);
 w0=sqrt(k/mass);
-pf=asin(p0/w0);
+pf=asin((p0-pg0)/pa);
 clear v[tpvem];
 clear i[s];
-clear t[vp];
+clear t[vpe];
 velocity=v0;
 position=p0;
 tvs=1;
@@ -41,7 +41,7 @@ while t <= 1.1*2*pi/w0
   vt(i)=t;
   vp(i)=position;
   tp(i)=pg0+sin(w0*t+pf)*pa;
-  tv(i)=cos(w0*t+pf)*vmax;
+  tv(i)=cos(w0*t+pf)*va;
   vv(i)=velocity;
   ve(i)=energy(position,velocity,mass,k,g);
   te(i)=energy(tp(i),tv(i),mass,k,g);

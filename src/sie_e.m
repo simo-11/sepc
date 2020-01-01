@@ -3,7 +3,7 @@
 % gravity and potential energy are taken into account if g is set
 % 
 t = 0.0;
-dt = 2*pi;
+dt = 2.1;
 k=1;
 g=0;
 mass = 1.0;
@@ -24,13 +24,12 @@ clear i[s];
 clear t[vpes];
 velocity=v0;
 position=p0;
-tvs=1;
-if(w0*dt>2)
+ifsm=3;
+ifsmt={"-k*p*dt","limited -k*int(p*dt)","limited -k*p*dt"};
+if(w0*dt>2 && ifsm==1)
   fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
 endif
-ifsm=2;
-ifsmt={"-k*p*dt","-k*int(p*dt)"};
-while t <= 1.1*2*pi/w0
+while t <= 3.1*2*pi/w0
   % store for printing results 
   vt(i)=t;
   vp(i)=position;
@@ -42,31 +41,26 @@ while t <= 1.1*2*pi/w0
   te(i)=energy(tp(i),tv(i),mass,k,g);
   Is=ifs(k,mass,position,velocity,dt,w0,pg0,pa,ifsm); 
   fprintf('%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g\n',
-    t,position,velocity,e,ee,ek,ep,Is);
+    t,position,velocity,ve(i),ee,ek,ep,Is);
   % Is impulse from spring - better than -k*position*dt
   % - position at middle of timestep creates damping and is not stable
   %
   is(i)=Is;
-  Ig=mass*g*dt;
-  I=Ig+Is;
-  velocity += I/mass;
+  velocity += Is/mass;
   position += velocity * dt;
   i++;
   t += dt;
  end 
  clf
- subplot(1,5,1);
+ subplot(1,4,1);
  plot(vt,vp,'k',vt,tp,'r');
  title(["sie: p [m]  " datestr(now())]);
- subplot(1,5,2);
+ subplot(1,4,2);
  plot(vt,vv,'k',vt,tv,'r');
  title(['v [m/s], k=' num2str(k) ', m=' num2str(mass) ', dt=' num2str(dt)]);
- subplot(1,5,3);
+ subplot(1,4,3);
  plot(vt,ve,'k',vt,te,'r');
  title(['e [J] - \omega\Delta_t=' num2str(w0*dt)]);
- subplot(1,5,4);
+ subplot(1,4,4);
  plot(vt,is,'k',vt,ts,'r');
  title(['ifs [Ns] = ' ifsmt{ifsm}]);
-% subplot(1,5,5);
-% plot(vt,vm,'b');
-% title(['v_{max} [m/s]']);

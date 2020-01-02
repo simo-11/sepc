@@ -3,33 +3,35 @@
 % gravity and potential energy are taken into account if g is set
 % 
 t = 0.0;
-dt = 2.1;
+dt = 0.1;
 k=1;
-g=0;
+g=10;
 mass = 1.0;
+pg0=-mass*g/k
 v0=sqrt(0.01/2);
-p0=sqrt(0.01/2);
-pg0=-mass*g/k;
-fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
-  'time','position','velocity','energy',
-  'elastic-e','kinetic-e','potential-e','ifs');
+p0=pg0+sqrt(0.01/2);
+v0=0;
+p0=-10;
 i=1;
-[e0,ee,ek,ep] = energy(p0,v0,mass,k,g);
+[e0,ee,ek,ep] = energy(p0,v0,mass,k,g)
 pa=sqrt(2*(ee+ek)/k)
-va=sqrt(2*(ee+ek)/mass);
-w0=sqrt(k/mass);
-pf=asin((p0-pg0)/pa);
+va=sqrt(2*(ee+ek)/mass)
+w0=sqrt(k/mass)
+pf=asin((p0-pg0)/pa)
 clear v[tpvem];
 clear i[s];
 clear t[vpes];
 velocity=v0;
 position=p0;
-ifsm=3;
+ifsm=1;
 ifsmt={"-k*p*dt","limited -k*int(p*dt)","limited -k*p*dt"};
 if(w0*dt>2 && ifsm==1)
   fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
 endif
-while t <= 3.1*2*pi/w0
+fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
+  'time','position','velocity','energy',
+  'elastic-e','kinetic-e','gravity-e','ifs');
+while t <= 1.1*2*pi/w0
   % store for printing results 
   vt(i)=t;
   vp(i)=position;

@@ -11,13 +11,19 @@ pg0=-mass*g/k
 v0=sqrt(0.01/2);
 p0=pg0+sqrt(0.01/2);
 v0=0;
-p0=-10;
+p0=-11;
 i=1;
+[e0_pg0,ee_pg0,ek_pg0,ep_pg0]=energy(pg0,0,mass,k,g)
 [e0,ee,ek,ep] = energy(p0,v0,mass,k,g)
-pa=sqrt(2*(ee+ek)/k)
-va=sqrt(2*(ee+ek)/mass)
+ea=(ee+ek-(ee_pg0+ek_pg0))
+pa=sqrt(2*ea/k)
+va=sqrt(2*ea/mass)
 w0=sqrt(k/mass)
-pf=asin((p0-pg0)/pa)
+if(pa>eps)
+  pf=asin((p0-pg0)/pa)
+else
+  pf=0
+endif  
 clear v[tpvem];
 clear i[s];
 clear t[vpes];
@@ -28,6 +34,7 @@ ifsmt={"-k*p*dt","limited -k*int(p*dt)","limited -k*p*dt"};
 if(w0*dt>2 && ifsm==1)
   fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
 endif
+ig=-mass*g*dt % impulse from gravity
 fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
   'time','position','velocity','energy',
   'elastic-e','kinetic-e','gravity-e','ifs');
@@ -44,11 +51,9 @@ while t <= 1.1*2*pi/w0
   Is=ifs(k,mass,position,velocity,dt,w0,pg0,pa,ifsm); 
   fprintf('%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g%-11.3g\n',
     t,position,velocity,ve(i),ee,ek,ep,Is);
-  % Is impulse from spring - better than -k*position*dt
-  % - position at middle of timestep creates damping and is not stable
-  %
+  % Is impulse from spring - hopefully better than -k*position*dt
   is(i)=Is;
-  velocity += Is/mass;
+  velocity += (Is+ig)/mass;
   position += velocity * dt;
   i++;
   t += dt;

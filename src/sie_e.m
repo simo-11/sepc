@@ -3,7 +3,7 @@
 % gravity and potential energy are taken into account if g is set
 % 
 t = 0.0;
-dt = 0.1;
+dt = 2.1;
 k=1;
 g=10;
 mass = 1.0;
@@ -29,7 +29,7 @@ clear i[s];
 clear t[vpes];
 velocity=v0;
 position=p0;
-ifsm=1;
+ifsm=3;
 ifsmt={"-k*p*dt","limited -k*int(p*dt)","limited -k*p*dt"};
 if(w0*dt>2 && ifsm==1)
   fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
@@ -38,7 +38,7 @@ ig=-mass*g*dt % impulse from gravity
 fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
   'time','position','velocity','energy',
   'elastic-e','kinetic-e','gravity-e','ifs');
-while t <= 3.1*2*pi/w0
+while t <= 2.1*2*pi/w0
   % store for printing results 
   vt(i)=t;
   vp(i)=position;
@@ -61,13 +61,16 @@ while t <= 3.1*2*pi/w0
  clf
  subplot(1,4,1);
  plot(vt,vp,'k',vt,tp,'r');
- title(["sie: p [m]  " datestr(now())]);
+ title(["sie: p [m]  "
+   datestr(now())]);
  subplot(1,4,2);
  plot(vt,vv,'k',vt,tv,'r');
- title(['v [m/s], k=' num2str(k) ', m=' num2str(mass) ', dt=' num2str(dt)]);
+ title(['v [m/s], k=' num2str(k) ', m=' num2str(mass) ',' 
+ ' dt=' num2str(dt)  ', g=' num2str(g)]);
  subplot(1,4,3);
  plot(vt,ve,'k',vt,te,'r');
- title(['e [J] - \omega\Delta_t=' num2str(w0*dt)]);
+ title(['e [J] - \omega\Delta_t=' num2str(w0*dt)
+ '\omega=' num2str(w0) ]);
  subplot(1,4,4);
  plot(vt,is,'k',vt,ts,'r');
  title(['ifs [Ns] = ' ifsmt{ifsm}]);

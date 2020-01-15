@@ -3,7 +3,7 @@
 % gravity and potential energy are taken into account if g is set
 % 
 t = 0.0;
-dt = 2.1;
+dt = 0.1;
 k=1;
 g=10;
 mass = 1.0;
@@ -27,9 +27,11 @@ endif
 clear v[tpvem];
 clear i[s];
 clear t[vpes];
+clear ec[ekp]; % energy from computation for elastic, kinetic and potential
+clear et[ekp]; % theoretical
 velocity=v0;
 position=p0;
-ifsm=3;
+ifsm=1;
 ifsmt={"-k*p*dt","limited -k*int(p*dt)","limited -k*p*dt"};
 if(w0*dt>2 && ifsm==1)
   fprintf('Integration will be unstable w0*dt= %f, i.e.>2\n',w0*dt);
@@ -47,7 +49,8 @@ while t <= 2.1*2*pi/w0
   tv(i)=cos(w0*t+pf)*va;
   vv(i)=velocity;
   [ve(i),ee,ek,ep]=energy(position,velocity,mass,k,g);
-  te(i)=energy(tp(i),tv(i),mass,k,g);
+  ece(i)=ee;eck(i)=ek;ecp(i)=ep;
+  [te(i),ete(i),etk(i),etp(i)]=energy(tp(i),tv(i),mass,k,g);
   Is=ifs(k,mass,position,velocity,dt,w0,pg0,pa,ifsm); 
   fprintf('%-11.4g%-11.4g%-11.4g%-11.4g%-11.4g%-11.4g%-11.4g%-11.4g\n',
     t,position,velocity,ve(i),ee,ek,ep,Is);
@@ -59,18 +62,27 @@ while t <= 2.1*2*pi/w0
   t += dt;
  end 
  clf
- subplot(1,4,1);
+ subplot(2,4,1);
  plot(vt,vp,'k',vt,tp,'r');
  title(["sie: p [m]  "
    datestr(now())]);
- subplot(1,4,2);
+ subplot(2,4,2);
  plot(vt,vv,'k',vt,tv,'r');
  title(['v [m/s], k=' num2str(k) ', m=' num2str(mass) ',' 
  ' dt=' num2str(dt)  ', g=' num2str(g)]);
- subplot(1,4,3);
+ subplot(2,4,3);
  plot(vt,ve,'k',vt,te,'r');
  title(['e [J] - \omega\Delta_t=' num2str(w0*dt)
  '\omega=' num2str(w0) ]);
- subplot(1,4,4);
+ subplot(2,4,4);
  plot(vt,is,'k',vt,ts,'r');
  title(['ifs [Ns] = ' ifsmt{ifsm}]);
+ subplot(2,4,5);
+ plot(vt,ece,'k', vt,ete,'r', vt,ece-ete,'b');
+ title(['elastic energy, diff in blue [J]']);
+ subplot(2,4,6);
+ plot(vt,eck,'k', vt,etk,'r', vt,eck-etk,'b');
+ title(['kinetic energy, diff in blue [J]']);
+ subplot(2,4,7);
+ plot(vt,ecp,'k', vt,etp,'r', vt,ecp-etp,'b');
+ title(['potential energy, diff in blue[J]']);

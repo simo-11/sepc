@@ -10,7 +10,7 @@ mass = 1.0;
 pg0=-mass*g/k
 v0=sqrt(0.01/2);
 p0=pg0+sqrt(0.01/2);
-v0=0;
+v0=-10;
 p0=0;
 i=1;
 [e0,ee,ek,ep] = energy(p0,v0,mass,k,g)
@@ -21,14 +21,21 @@ va=sqrt(2*ea/mass)
 w0=sqrt(k/mass)
 if(pa>eps)
   pf=asin((p0-pg0)/pa)
+  if(v0<0)
+    pf=pi-pf
+  endif
 else
   pf=0
 endif  
-clear v[tpvem];
+% vectors for time, position, velocity, energy
+clear v[tpve];
 clear i[s];
+% vectors for theoretical values for velocity, position, energy, spring impulse
 clear t[vpes];
-clear ec[ekp]; % energy from computation for elastic, kinetic and potential
-clear et[ekp]; % theoretical
+% energy from computation for elastic, kinetic and potential
+clear ec[ekp];
+% theoretical energies
+clear et[ekp];
 velocity=v0;
 position=p0;
 ifsm=1;
@@ -40,7 +47,7 @@ ig=-mass*g*dt % impulse from gravity
 fprintf('%-11s%-11s%-11s%-11s%-11s%-11s%-11s%-11s\n',
   'time','position','velocity','energy',
   'elastic-e','kinetic-e','gravity-e','ifs');
-while t <= 2.1*2*pi/w0
+while t <= 1.1*2*pi/w0
   % store for printing results 
   vt(i)=t;
   vp(i)=position;

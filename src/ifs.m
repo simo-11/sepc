@@ -50,6 +50,13 @@ function i=ifs(k,m,p,v,dt,w0,pg0,pa,type)
         ii,imax,imin,i
       endif
     endif   
+   case 4
+% spring force at start of step for whole step
+% but fix force needed
+    i=-k*p*dt;
+    if(w0*dt>1.98)
+      i=(pg0-p-v*dt)*m/dt;
+    endif   
   otherwise
     error(["type " num2str(type) " not supported in ifs"]);
   endswitch

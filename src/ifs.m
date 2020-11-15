@@ -28,11 +28,11 @@ function i=ifs(k,m,p,v,dt,w0,pg0,pa,type)
         i=imin;
       elseif(i>imax)
         i=imax;
-      endif
-      if(i!=ii)
+      end
+      if(i~=ii)
         ii,imax,imin,i
-      endif
-    endif
+      end
+    end
    case 3
 % spring force at start of step for whole step
 % but check limit
@@ -45,19 +45,18 @@ function i=ifs(k,m,p,v,dt,w0,pg0,pa,type)
         i=imin;
       elseif(i>imax)
         i=imax;
-      endif
-      if(i!=ii)
-        ii,imax,imin,i
-      endif
-    endif   
+      end
+      if(i~=ii)
+        ii,imax;imin,i
+      end
+    end
    case 4
 % spring force at start of step for whole step
 % but fix force needed
     i=-k*p*dt;
     if(w0*dt>1.98)
       i=(pg0-p-v*dt)*m/dt;
-    endif   
+    end   
   otherwise
     error(["type " num2str(type) " not supported in ifs"]);
-  endswitch
-endfunction
+end

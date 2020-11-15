@@ -14,17 +14,17 @@ i=1;
 e0=0.5*k*position*position-mass*g*position;
 clear v[tpve];
 while t <= 1.1*2*pi*sqrt(mass/k)
-  vt(i)=t;
+  vt(i)=t; %#ok<*SAGROW>
   vp(i)=position;
   vv(i)=velocity;
   e=0.5*k*position*position+0.5*mass*velocity*velocity-mass*g*position;
   ve(i)=e;
   force=-k*position+mass*g;
-  velocity +=( force / mass ) * dt;
-  position += velocity * dt;
+  velocity = velocity +( force / mass ) * dt;
+  position = position+ velocity * dt;
   fprintf('%-12.3f%-12.3f%-12.3f%-12.3f\n',t,position,velocity,e);
-  i++;
-  t += dt;
+  i=i+1;
+  t = t+ dt;
  end 
  clf
  subplot(1,3,1);
